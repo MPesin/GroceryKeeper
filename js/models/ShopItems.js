@@ -1,4 +1,4 @@
-export default function ItemController(){
+export default function ShopItems(){
   
   const Item = function (id, name, price) {
     this.id = id;
@@ -10,10 +10,10 @@ export default function ItemController(){
   
   
   return {
-    GetItems: () => {
+    getItems: () => {
       return items;
     },
-    AddItem: (name, price) => {
+    addItem: (name, price) => {
       let id; 
 
       if (items.length === 0){
