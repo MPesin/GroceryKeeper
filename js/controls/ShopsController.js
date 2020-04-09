@@ -59,8 +59,20 @@ export default function ShopsController() {
       data.totalPrice += price;
     },
     getShops: () => data.shops,
+    getCurrentItem: () => data.currentItem,
     setItemToUpdate: (shop, id) => {
       return setCurerntItem(shop, id);
+    },
+    deleteCurrentItem: (shop) => {
+      if (data.currentItem != null){
+        data.shops.splice(data.currentItem.id, 1);
+      }
+    },
+    updateCurrentItem: (newData) => {
+      if (data.currentItem != null) {
+        data.currentItem.name = newData.name;
+        data.currentItem.price = newData.price;
+      }
     }
   }
 }

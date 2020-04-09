@@ -15,6 +15,8 @@ uiControl.init();
 
   document.querySelector(uiControl.UIIdentifiers.DELETE_BUTTON).addEventListener('click', onDeleteItemClicked);
 
+  document.querySelector(uiControl.UIIdentifiers.BACK_BUTTON).addEventListener('click', onBackClicked);
+
   document.querySelector(uiControl.UIIdentifiers.SHOPS_TABLE_BODY).addEventListener('click', onEditItemClicked);
 
   document.addEventListener("keypress", disableEnterKey);
@@ -40,15 +42,23 @@ function onAddButtonClicked(e) {
 
 function onUpdateItemClicked(e){
   const input = uiControl.getInputFieldsData(); 
+  shopsControl.updateCurrentItem(input);
+  uiControl.updateItem(input.shop, shopsControl.getCurrentItem());
+  e.preventDefault();
+}
 
-
+function onBackClicked(e){
+  uiControl.clearItem();
+  uiControl.setAddState();
   e.preventDefault();
 }
 
 function onDeleteItemClicked(e){
   const input = uiControl.getInputFieldsData(); 
-
-
+  shopsControl.deleteCurrentItem(input.shop);
+  uiControl.clearItem();
+  uiControl.setAddState();
+  uiControl.updateTable(shopsControl.getShops());
   e.preventDefault();
 }
 

@@ -10,7 +10,8 @@ export default function StateController(uiIndentifires) {
       addButtonState: state === States.EDIT ? "none" : "inline",
       editButtonState: state === States.ADD ? "none" : "inline",
       deleteButtonState: state === States.ADD ? "none" : "inline",
-      backButtonState: state === States.ADD ? "none" : "inline"
+      backButtonState: state === States.ADD ? "none" : "inline",
+      storeInputFieldReadonly: state === States.EDIT
     }
 
   }
@@ -21,7 +22,7 @@ export default function StateController(uiIndentifires) {
     document.querySelector(uiIndentifires.UPDATE_BUTTON).style.display = stateVariables.editButtonState;
     document.querySelector(uiIndentifires.DELETE_BUTTON).style.display = stateVariables.deleteButtonState;
     document.querySelector(uiIndentifires.BACK_BUTTON).style.display = stateVariables.backButtonState;
-
+    document.querySelector(uiIndentifires.ITEM_SHOP_ID).readOnly = stateVariables.storeInputFieldReadonly;    
   }
 
   return {

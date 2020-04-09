@@ -16,6 +16,13 @@ export default function UICotroller() {
     EDIT_ITEM: "edit-item",
   }
 
+  function generateItemHtml(item){
+    return `<strong>${item.name}: </strong> <em>${item.price} &#8362</em>
+    <a href="#!" class="secondary-content">
+      <i class="edit-item material-icons">edit</i>
+    </a>`
+  }
+
   const stateControlle = new StateController(UIIdentifiers);
 
   function populateTableHead(shops) {
@@ -60,10 +67,7 @@ export default function UICotroller() {
         //if item exists add him
         if (items[i] != null) {
           html += `<td id="item-${shops[j].name}-${items[i].id}">
-            <strong>${items[i].name}: </strong> <em>${items[i].price} &#8362</em>
-            <a href="#!" class="secondary-content">
-              <i class="edit-item material-icons">edit</i>
-            </a>
+            ${generateItemHtml(items[i])}
             </td>
             `
         }
@@ -104,14 +108,19 @@ export default function UICotroller() {
         shop: document.querySelector(UIIdentifiers.ITEM_SHOP_ID).value
       }
     },
-    clearTable: () => {
-      document.querySelector(UIIdentifiers.SHOPS_TABLE_HEADER).innerHTML = "";
-      document.querySelector(UIIdentifiers.SHOPS_TABLE_BODY).innerHTML = "";
-    },
     updateTable: (shops) => {
       console.log("Updating Table");
       clearTable();
       populateTable(shops);
+    },
+    clearTable: () => {
+      document.querySelector(UIIdentifiers.SHOPS_TABLE_HEADER).innerHTML = "";
+      document.querySelector(UIIdentifiers.SHOPS_TABLE_BODY).innerHTML = "";
+    },
+    updateItem: (shop, item) => {
+      const itemId = `#item-${shop}-${item.id}`;
+      const html = generateItemHtml(item);
+      document.querySelector(itemId).innerHTML = html;
     },
     clearItem: () => {
       setItemFieldsValues();
