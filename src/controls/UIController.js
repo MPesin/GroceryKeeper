@@ -1,6 +1,9 @@
 import StateController from './StateController.js';
 
-export default function UICotroller() {
+export default function UICotroller(repo) {
+
+  this.repo = repo;
+
   // UIIdentifiers holds constats used to identify html elements 
   // @enum
   const UIIdentifiers = {
@@ -12,18 +15,23 @@ export default function UICotroller() {
     ADD_BUTTON: ".add-btn",
     UPDATE_BUTTON: ".update-btn",
     DELETE_BUTTON: ".delete-btn",
+    CLEAR_ALL_BUTTON: ".clear-all-btn",
     BACK_BUTTON: ".back-btn",
     EDIT_ITEM: "edit-item",
   }
 
-  function generateItemHtml(item){
+  const stateControlle = new StateController(UIIdentifiers);
+
+  function generateItemHtml(item) {
     return `<strong>${item.name}: </strong> <em>${item.price} &#8362</em>
     <a href="#!" class="secondary-content">
       <i class="edit-item material-icons">edit</i>
     </a>`
   }
 
-  const stateControlle = new StateController(UIIdentifiers);
+  function generateTotalPriceHtml(shop) {
+    return `<strong>Total Store Price:</strong> ${shop.totalPrice} &#8362`;
+  }
 
   function populateTableHead(shops) {
     let head = "";
@@ -36,7 +44,7 @@ export default function UICotroller() {
   function maxInventoryLength(shops) {
     let maxLength = 0;
     shops.forEach(shop => {
-      const currentLength = shop.items.getItems().length;
+      const currentLength = shop.allItems.length;
       if (maxLength < currentLength) {
         maxLength = currentLength;
       }
@@ -47,7 +55,7 @@ export default function UICotroller() {
   function populateTableBodyTotalPrices(shops) {
     let body = "";
     shops.forEach(shop => {
-      body += `<td><strong>Total Store Price:</strong> ${shop.totalPrice} &#8362</td>`
+      body += `<td id="total-price-${shop.name}">${generateTotalPriceHtml(shop)}</td>`
     });
     const tr = document.createElement("tr");
     tr.innerHTML = body;
@@ -63,7 +71,7 @@ export default function UICotroller() {
       // Create a cell for each shop
       // j - iterator over shops
       for (let j = 0; j < shops.length; j++) {
-        const items = shops[j].items.getItems();
+        const items = shops[j].allItems;
         //if item exists add him
         if (items[i] != null) {
           html += `<td id="item-${shops[j].name}-${items[i].id}">
@@ -108,19 +116,15 @@ export default function UICotroller() {
         shop: document.querySelector(UIIdentifiers.ITEM_SHOP_ID).value
       }
     },
-    updateTable: (shops) => {
+    updateTable: () => {
       console.log("Updating Table");
       clearTable();
+      const shops = this.repo.pullShops();
       populateTable(shops);
     },
     clearTable: () => {
       document.querySelector(UIIdentifiers.SHOPS_TABLE_HEADER).innerHTML = "";
       document.querySelector(UIIdentifiers.SHOPS_TABLE_BODY).innerHTML = "";
-    },
-    updateItem: (shop, item) => {
-      const itemId = `#item-${shop}-${item.id}`;
-      const html = generateItemHtml(item);
-      document.querySelector(itemId).innerHTML = html;
     },
     clearItem: () => {
       setItemFieldsValues();
@@ -136,6 +140,8 @@ export default function UICotroller() {
     },
     init: () => {
       stateControlle.setAddState();
+      const shops = this.repo.pullShops();
+      populateTable(shops);
     }
   }
 }
