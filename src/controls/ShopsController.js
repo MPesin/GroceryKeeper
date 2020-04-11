@@ -68,13 +68,11 @@ export default class ShopsController extends ObservableObject {
   deleteCurrentItem() {
     const shopIndex = this.indexOfShop(this.data.currentItem.shopName);
     this.data.shops[shopIndex].removeItem(this.data.currentItem.itemId);
-    console.log(this.data.shops.length, shopIndex);
 
     // If shop is empty remove it.
     if (this.data.shops[shopIndex].allItems.length === 0) {
       this.data.shops.splice(shopIndex, 1);
     }
-    console.log(this.data.shops, this.data.shops.length);
     this.updateRepository(true);
     this.clearFocusedItem();
   }
@@ -90,8 +88,6 @@ export default class ShopsController extends ObservableObject {
   clearAll() {
     this.repo.clear();
     this.data.shops = [];
-    console.log(this.data.shop);
-
     this.notifyAll();
   }
   //end methods 
